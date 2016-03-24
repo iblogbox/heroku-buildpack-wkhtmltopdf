@@ -42,4 +42,6 @@ unzip font_korean.zip -d font_korean
 ls -l font_korean/*ttf
 mkdir /app/.fonts
 cp font_korean/*ttf ~/.fonts
-fc-cache -fv
+
+
+fc-cache -f -v
