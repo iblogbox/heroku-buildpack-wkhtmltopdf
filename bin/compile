@@ -37,16 +37,16 @@ export PKG_CONFIG_PATH="\$HOME/.apt/usr/local/lib/x86_64-linux-gnu/pkgconfig:\$H
 EOF
 
 echo "-----> Installing fonts"
+mkdir /app/.fonts
+
 wget http://static.campaign.naver.com/0/hangeul/renew/download/NanumFont_TTF.zip -O font_korean.zip
 unzip font_korean.zip -d font_korean
 ls -l font_korean/*ttf
-mkdir /app/.fonts
 cp font_korean/*ttf ~/.fonts
 
 wget https://raw.githubusercontent.com/iblogbox/heroku-buildpack-wkhtmltopdf/master/font_chinese.zip -O font_chinese.zip
 unzip font_chinese.zip -d font_chinese
-ls -l font_chinese/*ttf
-mkdir /app/.fonts
-cp font_chinese/*ttf ~/.fonts
+ls -l font_chinese/*ttc
+cp font_chinese/*ttc ~/.fonts
 
 fc-cache -f -v
