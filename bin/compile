@@ -34,4 +34,12 @@ export INCLUDE_PATH="\$HOME/.apt/usr/local/include:\$INCLUDE_PATH"
 export CPATH="\$INCLUDE_PATH"
 export CPPPATH="\$INCLUDE_PATH"
 export PKG_CONFIG_PATH="\$HOME/.apt/usr/local/lib/x86_64-linux-gnu/pkgconfig:\$HOME/.apt/usr/local/lib/i386-linux-gnu/pkgconfig:\$HOME/.apt/usr/local/lib/pkgconfig:\$PKG_CONFIG_PATH"
+
+echo "-----> Installing fonts"
+wget http://static.campaign.naver.com/0/hangeul/renew/download/NanumFont_TTF.zip -O font_korean.zip
+unzip font_korean.zip -d font_korean
+ls -l font_korean/*ttf
+mkdir .fonts
+cp font_korean/*ttf ~/.fonts
+fc-cache -fv
 EOF
