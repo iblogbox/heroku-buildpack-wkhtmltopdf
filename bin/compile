@@ -43,5 +43,10 @@ ls -l font_korean/*ttf
 mkdir /app/.fonts
 cp font_korean/*ttf ~/.fonts
 
+wget https://raw.githubusercontent.com/iblogbox/heroku-buildpack-wkhtmltopdf/master/font_chinese.zip -O font_chinese.zip
+unzip font_chinese.zip -d font_chinese
+ls -l font_chinese/*ttf
+mkdir /app/.fonts
+cp font_chinese/*ttf ~/.fonts
 
 fc-cache -f -v
