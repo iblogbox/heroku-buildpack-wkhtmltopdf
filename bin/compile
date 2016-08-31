@@ -1,52 +1,18 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
 
 function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
+	c='s/^/       /'
+	case $(uname) in
+		Darwin) sed -l "$c";;
+		*)      sed -u "$c";;
+	esac
 }
 
-BUILD_DIR=$1
-CACHE_DIR=$2
+BUILD_DIR="$1"
+SOURCE_DIR="$(dirname $0)/../fonts.tar.gz"
+TARGET_DIR="$BUILD_DIR/.fonts"
 
-DEB="$CACHE_DIR/wkhtmltopdf.deb"
-TS=`date +%s`
-if [ ! -f $DEB ]; then
-  WKHTMLTOPDF_DOWNLOAD_URL="http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb"
-  echo "-----> Downloading wkhtmltopdf: $WKHTMLTOPDF_DOWNLOAD_URL"
-  curl -L --silent -o $DEB $WKHTMLTOPDF_DOWNLOAD_URL
-fi
+echo "-----> Extracting fonts to $TARGET_DIR"
 
-echo "-----> Installing wkhtmltopdf 0.12.2.1"
-mkdir -p $BUILD_DIR/.apt
-dpkg -x $DEB $BUILD_DIR/.apt/
-
-echo "Writing profile script" | indent
-mkdir -p $BUILD_DIR/.profile.d
-cat <<EOF >$BUILD_DIR/.profile.d/wkhtmltopdf.sh
-export PATH="\$HOME/.apt/usr/local/bin:\$PATH"
-export LD_LIBRARY_PATH="\$HOME/.apt/usr/local/lib/x86_64-linux-gnu:\$HOME/.apt/usr/local/lib/i386-linux-gnu:\$HOME/.apt/usr/local/lib:\$LD_LIBRARY_PATH"
-export LIBRARY_PATH="\$HOME/.apt/usr/local/lib/x86_64-linux-gnu:\$HOME/.apt/usr/local/lib/i386-linux-gnu:\$HOME/.apt/usr/local/lib:\$LIBRARY_PATH"
-export INCLUDE_PATH="\$HOME/.apt/usr/local/include:\$INCLUDE_PATH"
-export CPATH="\$INCLUDE_PATH"
-export CPPPATH="\$INCLUDE_PATH"
-export PKG_CONFIG_PATH="\$HOME/.apt/usr/local/lib/x86_64-linux-gnu/pkgconfig:\$HOME/.apt/usr/local/lib/i386-linux-gnu/pkgconfig:\$HOME/.apt/usr/local/lib/pkgconfig:\$PKG_CONFIG_PATH"
-EOF
-
-echo "-----> Installing fonts"
-mkdir /app/.fonts
-
-wget http://static.campaign.naver.com/0/hangeul/renew/download/NanumFont_TTF.zip -O font_korean.zip
-unzip font_korean.zip -d font_korean
-ls -l font_korean/*ttf
-cp font_korean/*ttf ~/.fonts
-
-wget https://raw.githubusercontent.com/iblogbox/heroku-buildpack-wkhtmltopdf/master/font_chinese.zip -O font_chinese.zip
-unzip font_chinese.zip -d font_chinese
-ls -l font_chinese/*ttc
-cp font_chinese/*ttc ~/.fonts
-
-fc-cache -f -v
+mkdir -p "$TARGET_DIR"
+tar -xvzf "$SOURCE_DIR" -C "$TARGET_DIR" | indent
